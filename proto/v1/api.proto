@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+option go_package = "internal/grpc/v1";
+// import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+package proto.v1;
+
+// The task service definition.
+service TaskService {
+  // Create a new task.
+  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
+  // Read a task by ID.
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
+  // List all tasks optional limit and offset.
+  rpc ListTask(ListTaskRequest) returns (ListTaskResponse);
+  // Update an existing task.
+  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
+  // Delete a task by ID.
+  rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
+}
+service TagService {
+  // Create a new tag.
+  rpc CreateTag(CreateTagRequest) returns (CreateTagResponse);
+  // List all tags optional limit and offset.
+  rpc ListTag(ListTagRequest) returns (ListTagResponse);
+  // Delete a tag by ID.
+  rpc DeleteTag(DeleteTagRequest) returns (DeleteTagResponse);
+}
+
+message Task {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  google.protobuf.Timestamp limited_at = 6;
+  bool is_end = 7;
+
+  repeated Tag tags = 8;
+}
+
+// The request message for creating a new task.
+message CreateTaskRequest {
+  string title = 1;
+  string description = 2;
+  google.protobuf.Timestamp limited_at = 3;
+  repeated string tag_ids = 4;
+}
+
+message CreateTaskResponse {
+  string id = 1;
+}
+message GetTaskRequest {
+  string id = 1;
+}
+message GetTaskResponse {
+  Task task = 1;
+}
+message ListTaskRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+}
+message ListTaskResponse {
+  repeated Task tasks = 1;
+}
+
+message UpdateTaskRequest {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp limited_at = 4;
+  bool is_end = 5;
+  repeated string tag_ids = 6;
+}
+
+message UpdateTaskResponse {
+  bool success = 1;
+}
+
+message DeleteTaskRequest {
+  string id = 1;
+}
+
+// The response message for delete operation.
+message DeleteTaskResponse {
+  bool success = 1;
+}
+
+message Tag {
+  string id = 1;
+  string name = 2;
+}
+
+message CreateTagRequest {
+  string name = 1;
+}
+message CreateTagResponse {
+  string id = 1;
+}
+message ListTagRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+}
+message ListTagResponse {
+  repeated Tag tags = 1;
+}
+message DeleteTagRequest {
+  string id = 1;
+}
+message DeleteTagResponse {
+  bool success = 1;
+}
